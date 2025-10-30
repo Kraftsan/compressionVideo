@@ -11,7 +11,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.enums import ParseMode
 
 from config import BOT_TOKEN, MAX_DOWNLOAD_SIZE, MAX_UPLOAD_SIZE, CLOUDCONVERT_API_KEY
-from compression import CloudConvertCompressor
+from compression import MoviePyCompressor
 from video_utils import format_file_size
 
 # Настройка логирования
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 router = Router()
 
 # Инициализация компрессора
-compressor = CloudConvertCompressor(CLOUDCONVERT_API_KEY)
+compressor = MoviePyCompressor()
 
 # Хранилище состояний пользователей
 user_states: Dict[int, Dict[str, Any]] = {}
