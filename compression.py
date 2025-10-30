@@ -36,6 +36,8 @@ class MoviePyCompressor:
 
     def compress_video(self, input_path: str, output_path: str, quality: str = "medium") -> Tuple[bool, str]:
         """Сжимает видео используя MoviePy"""
+        clip = None
+        clip_resized = None
         try:
             if quality not in self.quality_profiles:
                 quality = "medium"
@@ -69,12 +71,9 @@ class MoviePyCompressor:
                 bitrate=settings["bitrate"],
                 audio_bitrate=settings["audio_bitrate"],
                 verbose=False,
-                logger=None
+                logger=None,
+                threads=4
             )
-
-            # Закрываем клипы для освобождения памяти
-            clip.close()
-            clip_resized.close()
 
             # Проверяем что файл создан
             if os.path.exists(output_path):
@@ -87,6 +86,15 @@ class MoviePyCompressor:
         except Exception as e:
             logger.error(f"MoviePy compression error: {e}")
             return False, f"Ошибка MoviePy: {str(e)}"
+        finally:
+            # ВАЖНО: Закрываем клипы в блоке finally
+            try:
+                if clip_resized:
+                    clip_resized.close()
+                if clip:
+                    clip.close()
+            except Exception as e:
+                logger.error(f"Error closing clips: {e}")
 
     def get_available_qualities(self):
         return list(self.quality_profiles.keys())
