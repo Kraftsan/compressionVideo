@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.INFO)
 
 async def test():
     from aiogram import Bot
-
+\\revoke key
     bot = Bot(token="8214580449:AAEIJkrtDAws7_FjEDSK5hmFaYoIH5-tw-w")
 
     try:
